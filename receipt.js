@@ -1,7 +1,7 @@
 const printer = require('printer');
 const { GlobalKeyboardListener } = require("node-global-key-listener");
 
-const printerName = "POS-58"; // Change this to your printer name
+const printerName = "POS-80C"; // Change this to your printer name
 
 const printReceipt = () => {
     const text = `
