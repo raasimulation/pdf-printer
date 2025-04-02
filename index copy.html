@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printing my printers</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+    <h1 style="font-family: Arial, Helvetica, sans-serif; font-weight: 200;">Receipt here:</h1>
+    <iframe id="pdfViewer" width="20%" height="850"></iframe>
+
+    <script>
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "p") { // Press "p" to trigger print
+                generateAndShowPDF();
+            }
+        });
+
+        function generateAndShowPDF() {
+            const { jsPDF } = window.jspdf;
+            let pageWidth = 72; // Printer width
+            let pageHeight = 10; // Start height at the top
+
+            const doc = new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: [pageWidth, 180] // Large height to start, will crop later
+            });
+
+            // Generate random numbers for page content
+            let randomNumbers = [];
+            for (let i = 0; i < 5; i++) { 
+                randomNumbers.push(Math.floor(Math.random() * 100) + 1);
+            }
+
+            // Page Content
+            doc.setFontSize(12);
+            doc.text("Some numbers that could have been are as follows:", 5, pageHeight, { maxWidth: pageWidth - 15 });
+            pageHeight += 14;
+
+            randomNumbers.forEach(num => {
+                doc.text(num.toString(), 5, pageHeight);
+                pageHeight += 10;
+            });
+
+            // Generate random large number
+            let bigNumber = Math.floor(Math.random() * 99) + 1;
+
+            // Random Prompt
+            const prompts = ["Give someone a hug", "Take a deep breath", "Smile at a stranger"];
+            let randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+
+            pageHeight += 10; // Add space before the big number
+
+            doc.setFontSize(20);
+            doc.text("Welcome", 10, pageHeight);
+            pageHeight += 20;
+
+            doc.setFontSize(50);
+            doc.text(bigNumber.toString(), 30, pageHeight);
+            pageHeight += 30;
+
+            doc.setFontSize(10);
+            doc.text("Please do not address the admin until being told so, follow the instructions on the receipt.", 5, pageHeight, { maxWidth: pageWidth - 10 });
+            pageHeight += 20;
+
+            doc.setFontSize(12);
+            doc.text("Instructions:", 5, pageHeight);
+            pageHeight += 10;
+
+            doc.setFontSize(14);
+            doc.text(randomPrompt, 5, pageHeight, { maxWidth: pageWidth - 10 });
+
+            // Crop page to fit content
+            doc.internal.pageSize.height = pageHeight + 10;
+
+            // Convert PDF to Blob URL
+            const pdfBlob = doc.output("blob");
+            const pdfURL = URL.createObjectURL(pdfBlob);
+
+            // Show in iframe
+            let pdfViewer = document.getElementById("pdfViewer");
+            pdfViewer.src = pdfURL;
+
+            // Wait a bit, then print
+            setTimeout(() => {
+                pdfViewer.contentWindow.print();
+            }, 500); // Give time to load before printing
+        }
+    </script>
+
+</body>
+</html>
