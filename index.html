@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Printing my printers</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
+
 <body>
 
     <h1 style="font-family: Arial, Helvetica, sans-serif; font-weight: 200;">Receipt here:</h1>
     <iframe id="pdfViewer" width="20%" height="850"></iframe>
 
     <script>
-        document.addEventListener("keydown", function(event) {
+        document.addEventListener("keydown", function (event) {
             if (event.key === "p") { // Press "p" to trigger print
                 generateAndShowPDF();
             }
@@ -21,57 +23,71 @@
         function generateAndShowPDF() {
             const { jsPDF } = window.jspdf;
             let pageWidth = 72; // Printer width
-            let pageHeight = 10; // Start height at the top
+            let pageHeight = 15; // Start height at the top
 
             const doc = new jsPDF({
                 orientation: "portrait",
                 unit: "mm",
-                format: [pageWidth, 180] // Large height to start, will crop later
+                format: [pageWidth, 80] // Large height to start, will crop later
             });
 
             // Generate random numbers for page content
             let randomNumbers = [];
-            for (let i = 0; i < 5; i++) { 
+            for (let i = 0; i < 6; i++) {
                 randomNumbers.push(Math.floor(Math.random() * 100) + 1);
             }
 
             // Page Content
             doc.setFontSize(12);
-            doc.text("Some numbers that could have been are as follows:", 5, pageHeight, { maxWidth: pageWidth - 15 });
-            pageHeight += 14;
+            doc.text("Some numbers that could have been are as follows:", pageWidth / 2, pageHeight - 50, { maxWidth: pageWidth - 5, align: "center" });
+            pageHeight += 10;
 
             randomNumbers.forEach(num => {
-                doc.text(num.toString(), 5, pageHeight);
-                pageHeight += 10;
+                doc.text(num.toString(), pageWidth / 2, pageHeight - 45, { align: "center" });
+                pageHeight += 15;
             });
 
-            // Generate random large number
+            doc.internal.pageSize.height = pageHeight + 10;
+
+            doc.addPage([pageWidth, 120], "portrait");
+            pageHeight = 10; // Reset height for new page
+
+            // Generate random large numberp
             let bigNumber = Math.floor(Math.random() * 99) + 1;
 
             // Random Prompt
-            const prompts = ["Give someone a hug", "Take a deep breath", "Smile at a stranger"];
+            const prompts = ["Give someone a hug", "Speak in another language for 3 minutes", "Sit on the carpet until someone talks to you in another language", "Approach the assistant", ""];
             let randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
 
-            pageHeight += 10; // Add space before the big number
+            pageHeight += 15; // Add space before the big number
 
             doc.setFontSize(20);
-            doc.text("Welcome", 10, pageHeight);
+            doc.text("Welcome", pageWidth / 2, pageHeight+2, { align: "center"});
             pageHeight += 20;
 
             doc.setFontSize(50);
-            doc.text(bigNumber.toString(), 30, pageHeight);
-            pageHeight += 30;
-
-            doc.setFontSize(10);
-            doc.text("Please do not address the admin until being told so, follow the instructions on the receipt.", 5, pageHeight, { maxWidth: pageWidth - 10 });
-            pageHeight += 20;
+            doc.text(bigNumber.toString(), pageWidth / 2, pageHeight, { align: "center"});
+            pageHeight += 30
 
             doc.setFontSize(12);
-            doc.text("Instructions:", 5, pageHeight);
-            pageHeight += 10;
+            const instructionsText = "Instructions:";
+            const textWidth = doc.getTextWidth(instructionsText);
+            const textX = (pageWidth - textWidth) / 2; // Center calculation
+            doc.text(instructionsText, textX, pageHeight - 20);
+            doc.setLineWidth(0.3);
+            doc.line(textX, pageHeight - 19, textX + textWidth, pageHeight - 19); // Underline
 
-            doc.setFontSize(14);
-            doc.text(randomPrompt, 5, pageHeight, { maxWidth: pageWidth - 10 });
+            doc.setFontSize(12);
+            doc.text(randomPrompt, pageWidth / 2, pageHeight - 13, { maxWidth: pageWidth - 8, align: "center" });
+            
+            doc.setDrawColor(200, 200, 200); // Light gray color
+            doc.line(5, pageHeight, pageWidth - 5, pageHeight); // Full-width line with margins
+            pageHeight += 7;
+
+            doc.setFontSize(9);
+            doc.setTextColor(110,110,110);
+            doc.text("Please do not address the assistant until being told so, follow the instructions on the receipt.", pageWidth / 2, pageHeight - 2, { maxWidth: pageWidth - 8, align: "center" });
+            pageHeight += 7;
 
             // Crop page to fit content
             doc.internal.pageSize.height = pageHeight + 10;
@@ -92,4 +108,5 @@
     </script>
 
 </body>
+
 </html>
