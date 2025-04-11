@@ -56,17 +56,17 @@
             let bigNumber = Math.floor(Math.random() * 99) + 1;
 
             // Random Prompt
-            const prompts = ["Give someone a hug", "Speak in another language for 3 minutes", "Sit on the carpet until someone talks to you in another language", "Approach the assistant", ""];
+            const prompts = ["Give someone a hug", "Speak in another language for 2 minutes", "Sit on the carpet until someone talks to you in another language", "Approach the assistant", "Don't approach the assistant","Sit next to the person sitting on the carpet","Ask 3 questions to the assistant","Jump when you hear the queue sound","Stand next to people who are jumping","Pretend to understand"];
             let randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
 
             pageHeight += 15; // Add space before the big number
 
             doc.setFontSize(20);
-            doc.text("Welcome", pageWidth / 2, pageHeight+2, { align: "center"});
+            doc.text("Welcome", pageWidth / 2, pageHeight + 2, { align: "center" });
             pageHeight += 20;
 
             doc.setFontSize(50);
-            doc.text(bigNumber.toString(), pageWidth / 2, pageHeight, { align: "center"});
+            doc.text(bigNumber.toString(), pageWidth / 2, pageHeight, { align: "center" });
             pageHeight += 30
 
             doc.setFontSize(12);
@@ -79,13 +79,13 @@
 
             doc.setFontSize(12);
             doc.text(randomPrompt, pageWidth / 2, pageHeight - 13, { maxWidth: pageWidth - 8, align: "center" });
-            
+
             doc.setDrawColor(200, 200, 200); // Light gray color
             doc.line(5, pageHeight, pageWidth - 5, pageHeight); // Full-width line with margins
             pageHeight += 7;
 
             doc.setFontSize(9);
-            doc.setTextColor(110,110,110);
+            doc.setTextColor(110, 110, 110);
             doc.text("Please do not address the assistant until being told so, follow the instructions on the receipt.", pageWidth / 2, pageHeight - 2, { maxWidth: pageWidth - 8, align: "center" });
             pageHeight += 7;
 
